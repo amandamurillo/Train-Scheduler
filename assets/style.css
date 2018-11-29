@@ -3,3 +3,30 @@ td {
   display: inline-block;
   width: 16.575%;
 }
+
+body {
+  /* Typography */
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+ 
+  background-image: url("images/dark-grey-terrazzo.png");
+}
+
+
+.jumbotron{
+
+  color: white;
+  font-family: 'Allura', cursive;
+  background-color: black;
+
+ 
+}
+h1{
+font-size: 80px;
+}
+.card-body{
+background-color: black;
+}
+
+.card-header{
+  background-color: black;
+}

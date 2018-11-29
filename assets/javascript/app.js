@@ -76,9 +76,9 @@ database.ref().on("child_added", function (childSnapshot) {
 
 
   // First Time (pushed back 1 year to make sure it comes before current time)
+//   returns a moment obj
   var trainFirstConverted = moment(trainFirst, "HH:mm").subtract(1, "years");
   console.log(trainFirstConverted);
-
   // Current Time
   var currentTime = moment();
   console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
@@ -100,6 +100,7 @@ database.ref().on("child_added", function (childSnapshot) {
   // Next Train
   var nextArrival = moment().add(timeLeft, "minutes");
   console.log("ARRIVAL TIME: " + moment(nextArrival).format("hh:mm"));
+  
   var convertedArrival = moment(nextArrival).format("hh:mm");
     // Create the new row
     var newRow = $("<tr>").append(
@@ -116,4 +117,9 @@ database.ref().on("child_added", function (childSnapshot) {
 }, function(errorObject) {
     console.log("Errors handled: " + errorObject.code);
 });
+
+
+// $('#myTableId tbody').remove();
+
+
 
