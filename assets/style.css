@@ -11,18 +11,21 @@ body {
   background-image: url("images/dark-grey-terrazzo.png");
 }
 
-
+.jumbotron h1{
+  margin-top:10%; 
+  left:10px;
+  font-size:60px;
+  color: black;
+  font-family: 'Allura', cursive;
+ }
 .jumbotron{
 
-  color: white;
-  font-family: 'Allura', cursive;
-  background-color: black;
+  background-image: url("images/b&w1.jpg");
 
- 
 }
-h1{
+/* h1{
 font-size: 80px;
-}
+} */
 .card-body{
 background-color: black;
 }

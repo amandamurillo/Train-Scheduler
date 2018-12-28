@@ -7,17 +7,17 @@
 // 5. Create a way to calculate the minutes away. Using difference between frequency and current time.
 
 
-  // Initialize Firebase
-  var config = {
+// Initialize Firebase
+var config = {
     apiKey: "AIzaSyAwOUlZN_34eR7LRgUsR05iKc_J4DreOLw",
     authDomain: "train-scheduler-9a7a3.firebaseapp.com",
     databaseURL: "https://train-scheduler-9a7a3.firebaseio.com",
     projectId: "train-scheduler-9a7a3",
     storageBucket: "train-scheduler-9a7a3.appspot.com",
     messagingSenderId: "430021765251"
-  };
+};
 
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
 
 // database reference
 var database = firebase.database();
@@ -66,7 +66,7 @@ database.ref().on("child_added", function (childSnapshot) {
     var trainName = childSnapshot.val().name;
     var trainDest = childSnapshot.val().dest;
     var trainFirst = childSnapshot.val().first;
-    var trainFreq = parseInt(childSnapshot.val().freq);
+    var trainFreq = childSnapshot.val().freq;
 
     // train info
     console.log(trainName);
@@ -75,51 +75,41 @@ database.ref().on("child_added", function (childSnapshot) {
     console.log(trainFreq);
 
 
-  // First Time (pushed back 1 year to make sure it comes before current time)
-//   returns a moment obj
-  var trainFirstConverted = moment(trainFirst, "HH:mm").subtract(1, "years");
-  console.log(trainFirstConverted);
-  // Current Time
-  var currentTime = moment();
-  console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
+    var timeArr = trainFirst.split(":");
+    var trainTime = moment().hours(timeArr[0]).minutes(timeArr[1]);
 
-  // Difference between first train and current time
-  var diffTime = moment().diff(moment(trainFirstConverted), "minutes");
-  console.log("DIFFERENCE IN TIME: " + diffTime);
-  
-  var diffTime = trainFirstConverted.diff(currentTime, "minutes")
+    //if first train is later than the current time
+    var maxMoment = moment.max(moment(), trainTime);
+    var tMinutes;
+    var tArrival;
 
-  // Time apart (remainder)
-  var tRemainder = diffTime % trainFreq;
-  console.log(tRemainder);
 
-  // Minute Until Train
-  var timeLeft = trainFreq - tRemainder;
-  console.log("MINUTES TILL TRAIN: " + timeLeft);
+    if (maxMoment === trainTime) {
+        tArrival = trainTime.format("hh:mm A");
+        tMinutes = trainTime.diff(moment(), "minutes");
+    }
+    else {
+        var diffTime = moment().diff(trainTime, "minutes");
+        var tRemainder = diffTime % trainFreq;
+        tMinutes = trainFreq - tRemainder;
 
-  // Next Train
-  var nextArrival = moment().add(timeLeft, "minutes");
-  console.log("ARRIVAL TIME: " + moment(nextArrival).format("hh:mm"));
-  
-  var convertedArrival = moment(nextArrival).format("hh:mm");
-    // Create the new row
-    var newRow = $("<tr>").append(
-        $("<td>").text(trainName),
-        $("<td>").text(trainDest),
-        $("<td>").text(trainFreq),
-        $("<td>").text(convertedArrival),
-        $("<td>").text(timeLeft)
+        tArrival = moment().add(tMinutes, "m").format("hh:mm A");
+    }
+    console.log("tMinutes:", tMinutes);
+    console.log("tArrival:", tArrival);
+
+    $("#train-table > tbody").append(
+        $("<tr>").append(
+            $("<td>").text(trainName),
+            $("<td>").text(trainDest),
+            $("<td>").text(trainFreq),
+            $("<td>").text(tArrival),
+            $("<td>").text(tMinutes)
+        )
     );
-
-    // Append the new row to the table
-    $("#train-table").append(newRow);
-
-}, function(errorObject) {
-    console.log("Errors handled: " + errorObject.code);
-});
+})
 
 
-// $('#myTableId tbody').remove();
 
 
 
